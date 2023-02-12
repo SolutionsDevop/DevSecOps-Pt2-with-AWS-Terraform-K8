@@ -37,5 +37,16 @@ pipeline {
                 }
             }
     }
+  stage('Kubernetes Deployment of repo Bugg Web Application') {
+	   steps {
+	      withKubeConfig([credentialsId: 'kubelogin']) {
+		  sh('kubectl delete all --all -n devsecops')
+		  sh ('kubectl apply -f deploy.yaml --namespace=devsecops')
+		  }
+	  }
+   	
   }
+
+  }
+
 }

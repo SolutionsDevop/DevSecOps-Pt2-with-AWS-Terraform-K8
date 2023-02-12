@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: repobuggy-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: repobuggy
+  template:
+    metadata:
+      labels:
+        app: repobuggy
+    spec:
+      containers:
+      - name: repobuggy
+        image: 556563769160.dkr.ecr.us-east-1.amazonaws.com/ecrrepo
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+# service type loadbalancer       
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: repobuggy
+    k8s-app: repobuggy
+  name: repobuggy
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  type: LoadBalancer
+  selector:
+    app: repobuggy
